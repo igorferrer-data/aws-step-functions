@@ -1,0 +1,74 @@
+{
+  "Comment": "A Hello World example demonstrating various state types of the Amazon States Language. It is composed of flow control states only, so it does not need resources to run.",
+  "StartAt": "Iniciando",
+  "States": {
+    "Iniciando": {
+      "Comment": "A Pass state passes its input to its output, without performing work. They can also generate static JSON output, or transform JSON input using filters and pass the transformed data to the next state. Pass states are useful when constructing and debugging state machines.",
+      "Type": "Pass",
+      "Result": {
+        "IsHelloWorldExample": true
+      },
+      "Next": "Projeto de Teste?"
+    },
+    "Projeto de Teste?": {
+      "Comment": "A Choice state adds branching logic to a state machine. Choice rules can implement many different comparison operators, and rules can be combined using And, Or, and Not",
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.IsHelloWorldExample",
+          "BooleanEquals": true,
+          "Next": "Sim"
+        },
+        {
+          "Variable": "$.IsHelloWorldExample",
+          "BooleanEquals": false,
+          "Next": "Não"
+        }
+      ],
+      "Default": "Sim"
+    },
+    "Sim": {
+      "Type": "Pass",
+      "Next": "Espere 5 segundos"
+    },
+    "Não": {
+      "Type": "Fail",
+      "Cause": "Not Hello World"
+    },
+    "Espere 5 segundos": {
+      "Comment": "A Wait state delays the state machine from continuing for a specified time.",
+      "Type": "Wait",
+      "Seconds": 5,
+      "Next": "Processo"
+    },
+    "Processo": {
+      "Comment": "A Parallel state can be used to create parallel branches of execution in your state machine.",
+      "Type": "Parallel",
+      "Next": "Executado com Sucesso!",
+      "Branches": [
+        {
+          "StartAt": "Projeto 1",
+          "States": {
+            "Projeto 1": {
+              "Type": "Pass",
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "Projeto 2",
+          "States": {
+            "Projeto 2": {
+              "Type": "Pass",
+              "End": true
+            }
+          }
+        }
+      ]
+    },
+    "Executado com Sucesso!": {
+      "Type": "Pass",
+      "End": true
+    }
+  }
+}
